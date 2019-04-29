@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+    <title>Socket.IO chat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font: 13px Helvetica, Arial;
+        }
+
+        form {
+            background: #000;
+            padding: 3px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        form input {
+            border: 0;
+            padding: 10px;
+            width: 90%;
+            margin-right: .5%;
+        }
+
+        form button {
+            width: 9%;
+            background: rgb(130, 224, 255);
+            border: none;
+            padding: 10px;
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #messages li {
+            padding: 5px 10px;
+        }
+
+        #messages li:nth-child(odd) {
+            background: #eee;
+        }
+
+        #messages {
+            margin-bottom: 40px
+        }
+
+        #message-form {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+<ul id="messages"></ul>
+<form id="user-form" action="">
+    <input id="user_first_name" autocomplete="off" placeholder="First Name"/>
+    <input id="user_last_name" autocomplete="off" placeholder="Last Name"/>
+    <input id="user_email" autocomplete="off" placeholder="E-mail"/>
+    <input id="user_phone" autocomplete="off" placeholder="Phone"/>
+    <button>Start Conversation</button>
+</form>
+<form id="message-form" action="">
+    <input id="user_message" autocomplete="off" placeholder="Message"/>
+    <button>Send</button>
+</form>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="guid.js"></script>
+<script>
+    $(function () {
+        var ws = new WebSocket("ws://localhost:9000/");
+        var cid = guid();
+        var uid = null;
+        //console.log(ws);
+        ws.onopen = function () {
+            ws.send(JSON.stringify({
+                cid: cid,
+                uid: uid,
+                action: 'conversation_data'
+            }));
+        };
+
+        function user_register() {
+            ws.send(JSON.stringify({
+                cid: cid,
+                uid: uid,
+                action: 'user_data',
+                user_first_name: $('#user_first_name').val(),
+                user_last_name: $('#user_last_name').val(),
+                user_email: $('#user_email').val(),
+                user_phone: $('#user_phone').val()
+            }));
+            return false;
+        }
+
+        function user_message() {
+            ws.send(JSON.stringify({
+                cid: cid,
+                uid: uid,
+                action: 'user_message',
+                user_message: $('#user_message').val()
+            }));
+            $('#user_message').val('');
+            return false;
+        }
+
+        ws.onmessage = function (event) {
+            var data = JSON.parse(event.data);
+            console.log("WebSocket message received:", data);
+            if (data.answer == "user_confirmed") {
+                $('#user-form').hide();
+                $('#message-form').show();
+                $('#user_message').attr('placeholder', "Hi " + data.user.first_name + ", write a message");
+                uid = data.user.id;
+
+            }
+            if (data.answer == "message_confirmed") {
+                $('#messages').append($('<li>').text(data.message.body));
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+            if (data.answer == "messages_loaded") {
+                for (var m in data.messages) {
+                    $('#messages').append($('<li>').text(data.messages[m].body));
+                    window.scrollTo(0, document.body.scrollHeight);
+                }
+
+            }
+        };
+        //Cind se apasa butonul se triemete messajul m al senderulu s
+        $('#user-form').submit(user_register);
+        $('#message-form').submit(user_message);
+        //cin apare evenimentul mesaj primit el face append in in lista chatului
+        // socket.on('chat message', function (msg) {
+        //     $('#messages').append($('<li>').text(msg.s + ": " + msg.m));
+        //     window.scrollTo(0, document.body.scrollHeight);
+        // });
+    });
+</script>
+</body>
+</html>

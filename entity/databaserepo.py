@@ -1,0 +1,53 @@
+from entity.entity import Entity
+from sql.sqldb import *
+from .factoryrepo import FactoryRepo
+
+
+class DatabaseRepo(FactoryRepo):
+    def __init__(self, table):
+        import config
+        self.db = Sql(config.get_config('database'))
+        self.table = table
+        super().__init__()
+
+    def add(self, user):
+        # self.db.insert()
+        self.entities[1] = user
+
+    def get(self, id):
+        entity = Entity()
+        entity.accessed = entity.now()
+        del entity.created
+        del entity.modified
+        entity.id = id
+        #self.db.update(self.table, entity)
+        self.db.commit()
+        return [i for i in self.db.select_one(self.table, id)][1:]
+
+
+    # def all(self,cid):
+    #     return self.entities
+
+    # def create(self):
+    #     super().__init__()
+
+    def save(self, entity):
+        # verify if id exists, if exists then update else insert
+        if entity.get_id() is None:
+            entity.created = entity.now()
+            self.db.insert(self.table, entity)
+        else:
+            entity.created = __class__.get(self, entity.get_id())[3]
+            entity.modified = entity.now()
+            self.db.update(self.table, entity)
+        self.db.commit()
+        # obtain last insert id in self
+        entity.id = self.db.last_id(self.table)
+        return entity
+
+    def delete(self, entity):
+        self.db.delete(self.table, entity)
+        self.db.commit()
+
+    # def last10(self):
+    #     pass
