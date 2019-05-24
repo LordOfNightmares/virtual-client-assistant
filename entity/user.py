@@ -11,9 +11,6 @@ class User(Entity):
         self.ai = bool(ai)
         super().__init__()
 
-    def __delete__(self, id):
-        return self.id
-
     def get_first_name(self):
         return self.first_name
 

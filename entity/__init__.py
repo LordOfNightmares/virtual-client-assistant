@@ -1,1 +1,3 @@
-__all__ = ["entity", "message", "user", "databaserepo", "messagerepo", "userrepo", "factoryrepo","pattern"]
+import os
+__all__ = [file[:-3] for file in os.listdir("./entity") if not file.startswith("__") and file.endswith(".py")]
+# print(__all__)

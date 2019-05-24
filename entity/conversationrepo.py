@@ -8,8 +8,8 @@ class ConversationDbRepo(DatabaseRepo):
 
     def get(self, id):
         r_select = self.db.select_one(self.table, id)
-        print('crg',r_select[3])
         if r_select:
+            # print('crg',r_select[3])
             # current = [i for i in self.db.select_one(self.table, id)]
             m = Conversation(id, r_select[3])
             return m

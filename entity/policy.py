@@ -11,9 +11,6 @@ class Policy(Entity):
         self.misses = misses
         super().__init__()
 
-    # def __delete__(self, id):
-    #     return self.id
-
     def get_title(self):
         return self.title
 

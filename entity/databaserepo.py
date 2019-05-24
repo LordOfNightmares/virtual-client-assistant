@@ -11,7 +11,6 @@ class DatabaseRepo(FactoryRepo):
         super().__init__()
 
     def add(self, user):
-        # self.db.insert()
         self.entities[1] = user
 
     def get(self, id):
@@ -20,16 +19,8 @@ class DatabaseRepo(FactoryRepo):
         del entity.created
         del entity.modified
         entity.id = id
-        #self.db.update(self.table, entity)
         self.db.commit()
         return [i for i in self.db.select_one(self.table, id)][1:]
-
-
-    # def all(self,cid):
-    #     return self.entities
-
-    # def create(self):
-    #     super().__init__()
 
     def save(self, entity):
         # verify if id exists, if exists then update else insert
@@ -48,6 +39,3 @@ class DatabaseRepo(FactoryRepo):
     def delete(self, entity):
         self.db.delete(self.table, entity)
         self.db.commit()
-
-    # def last10(self):
-    #     pass

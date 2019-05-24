@@ -1,7 +1,8 @@
+--ID question[tab]answer[tab]supporting fact IDS.
 CREATE TABLE Patterns(
         ID integer primary key AUTOINCREMENT,
-        title varchar(100), --
-        body varchar(2000),
+        title varchar(100), --aspect
+        body varchar(3000),--context
        	user_id integer,
        	hits integer,--folosit
         misses integer,--ignorat

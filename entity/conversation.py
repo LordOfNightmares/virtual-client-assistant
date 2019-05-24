@@ -12,8 +12,8 @@ class Conversation(Entity):
         del self.accessed
         self.ended = 0
 
-    # def __delete__(self, id):
-    #     return self.id
+    def get_ended(self):
+        return self.ended
 
     def get_mark(self):
         return self.mark

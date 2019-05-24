@@ -13,9 +13,6 @@ from entity.userrepo import UserDbRepo
 
 online_users = set()
 
-
-#
-#
 async def prepare_conversation(data):
     cdb = ConversationDbRepo()
     c = cdb.get(data['cid'])
@@ -30,14 +27,12 @@ async def prepare_conversation(data):
 async def process_msg(websocket):
     async for message in websocket:
         data = json.loads(message)
-        if len(data) > 1:
+        if data:
             action = data['action']
             if action == "conversation_data":
                 mdb = MessageDbRepo()
-
                 m = mdb.last(data['cid'])
                 print(m)
-
                 c = await prepare_conversation(data)
                 if c:
                     udb = UserDbRepo()
@@ -64,7 +59,7 @@ async def process_msg(websocket):
                 m = Message('', data['user_message'], data['uid'], 0, data['cid'])
                 mdb.save(m)
                 await websocket.send(json.dumps({"answer": "message_confirmed", "message": dict(m)}))
-            # udb.save(m)
+                # udb.save(m)
 
 
 # now = datetime.utcnow().isoformat() + 'Z'
@@ -99,17 +94,10 @@ async def process(websocket, path):
     await register(websocket)
     await process_msg(websocket)
     try:
-        # Implement logic here.
         await test()
         await asyncio.sleep(5)
     finally:
         await unregister(websocket)
-    #
-    # async for message in websocket:
-    #     init_conversation(message)
-    #     recv_msg(message)
-    #     load_msg(json.loads(message)['id'])
-    #     # send_msg()
 
 
 if __name__ == '__main__':
