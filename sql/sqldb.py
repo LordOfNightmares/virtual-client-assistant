@@ -41,19 +41,23 @@ class Sql(object):
         return ", ".join('\'{}\''.format(k) for k in _dict.values())
 
     def dictkv(self, entity, oper=","):
+        # print("hello")
         _dict = dict(entity)
         if type(_dict['id']) is not str:
             del _dict['id']
-            if oper == "and":
-                del _dict['created']
-                del _dict['modified']
-                del _dict['accessed']
-                del _dict['ai']
+            try:
+                if oper == "and":
+                    del _dict['created']
+                    del _dict['modified']
+                    del _dict['accessed']
+                    del _dict['ai']
+            except:
+                pass
         return (oper + " ").join('{} =\'{}\''.format(k, _dict[k]) for k in _dict.keys())
 
     def insert(self, table, entity):
         # ignore id
-        print(entity)
+        # print(entity)
         query = "INSERT INTO " + table + "(" + self.dictk(entity) + ") VALUES " + "(" + self.dictv(entity) + ")"
         # print(query)
         self.cur.execute(query)
@@ -74,12 +78,14 @@ class Sql(object):
         else:
             return None
 
-    def update(self, table, entity):
+    def update(self, table, entity, id=None):
+        if not id:
+            id = entity.get_id()
         check = [i[0] for i in self.select("SELECT id FROM " + table)]
-        if entity.get_id() not in check:
+        if id not in check:
             query = "INSERT INTO " + table + " VALUES " + "(" + self.dictv(entity) + ")"
         else:
-            query = "UPDATE " + table + " SET " + self.dictkv(entity) + " WHERE id = " + str(entity.get_id())
+            query = "UPDATE " + table + " SET " + self.dictkv(entity) + " WHERE id = " + str(id)
         # print(query)
         self.cur.execute(query)
 
@@ -89,6 +95,14 @@ class Sql(object):
     def delete(self, table, entity):
         query = "DELETE FROM " + table + " WHERE id = " + str(entity.get_id())
         self.cur.execute(query)
+
+    def select_one_thing(self, element, table, column, thing):
+        r_select = self.select("SELECT " + element + " FROM " + table + " WHERE " + column + " = '" + str(thing) + "'")
+        # print(r_select[0])
+        if r_select:
+            return r_select[0]
+        else:
+            return None
 
     def close(self):
         self.conn.close()

@@ -56,11 +56,22 @@ test_set_post_file = "tasks_1-20_v1-2/en/" + test_set_file
 process_models()
 '''-----------------------------------------------------------'''
 # Deserialize GloVe vectors
+print(os.getcwd())
+os.chdir('..')
+# print(os.getcwd())
+from entity.embeddingrepo import EmbeddingDbRepo
+
 glove_wordmap = {}
-with open(glove_vectors_file, "r", encoding="utf8") as glove:
-    for line in glove:
-        name, vector = tuple(line.split(" ", 1))
-        glove_wordmap[name] = np.fromstring(vector, sep=" ")
+embrepo = EmbeddingDbRepo()
+gloves = embrepo.get()
+for glove in gloves:
+    name, vector = list(glove)[1], list(glove)[2]
+    glove_wordmap[name] = np.fromstring(vector, sep=" ")
+# glove_wordmap = {}
+# with open(glove_vectors_file, "r", encoding="utf8") as glove:
+#     for line in glove:
+#         name, vector = tuple(line.split(" ", 1))
+#         glove_wordmap[name] = np.fromstring(vector, sep=" ")
 wvecs = []
 for item in glove_wordmap.items():
     wvecs.append(item[1])
@@ -71,7 +82,8 @@ v = np.var(s, 0)
 m = np.mean(s, 0)
 RS = np.random.RandomState()
 
-
+os.chdir('./neural')
+# print(os.getcwd())
 def fill_unk(unk):
     global glove_wordmap
     glove_wordmap[unk] = RS.multivariate_normal(m, np.diag(v))
@@ -630,4 +642,3 @@ print(np.mean(sess.run([corrects], feed_dict=prep_batch(final_test_data))[0]))
 '''-----------------------------------------------------------'''
 sess.close()
 '''-----------------------------------------------------------'''
-
