@@ -89,6 +89,10 @@ class Sql(object):
         # print(query)
         self.cur.execute(query)
 
+    def fast_update(self, table, entity, id):
+        query = "UPDATE " + table + " SET " + self.dictkv(entity) + " WHERE id = " + str(id)
+        self.cur.execute(query)
+
     def last_id(self, table):
         return self.select("SELECT rowid from " + table + " order by ROWID DESC limit 1 ")[0][0]
 

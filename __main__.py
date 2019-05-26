@@ -20,16 +20,10 @@
 # print(mdb.get(27))
 # from entity.patternrepo import PatternDbRepo
 #
-# from entity.patternrepo import PatternDbRepo
-# pdb = PatternDbRepo()
-# path = "./neural/tasks_1-20_v1-2/en/"
-# file = "qa5_three-arg-relations_test.txt"
-# file_path = path + file
-# pdb.upload_qa_to_db(file_path)
-# pdb.all(8)
-# pdb.db.close()
+
 from entity.embedding import Embedding
 from entity.embeddingrepo import EmbeddingDbRepo
+from entity.patternrepo import PatternDbRepo
 
 
 def upload_embeddings(glove_vectors_file, rewrite):
@@ -82,15 +76,18 @@ def upload_embeddings(glove_vectors_file, rewrite):
 # print(emrep.find('word', 'life'))
 
 
+# from entity.embeddingrepo import EmbeddingDbRepo
+# import numpy as np
+#
+# glove_wordmap = {}
+# embrepo = EmbeddingDbRepo()
+# gloves = embrepo.get()
+# for glove in gloves:
+#     name, vector = list(glove)[1], list(glove)[2]
+#     glove_wordmap[name] = np.fromstring(vector, sep=" ")
 
-from entity.embeddingrepo import EmbeddingDbRepo
-import numpy as np
-
-glove_wordmap = {}
-embrepo = EmbeddingDbRepo()
-gloves = embrepo.get()
-for glove in gloves:
-    name, vector = list(glove)[1], list(glove)[2]
-    glove_wordmap[name] = np.fromstring(vector, sep=" ")
-
-
+file = 'glove.6B.50d.txt'
+path = './neural/'
+file_path = path + file
+emrep = EmbeddingDbRepo()
+emrep.upload_embeddings(file_path)

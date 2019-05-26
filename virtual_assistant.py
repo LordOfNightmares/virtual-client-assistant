@@ -11,12 +11,12 @@ from tqdm import tqdm
 
 
 def process_models():
-    def download_models():
-        from filedownload import url_download
-        if not os.path.isfile(glove_zip_file) and not os.path.isfile(glove_vectors_file):
-            url_download("http://nlp.stanford.edu/data/glove.6B.zip", glove_zip_file)
-        if not os.path.isfile(data_set_zip) and not (os.path.isfile(train_set_file) and os.path.isfile(test_set_file)):
-            url_download("https://s3.amazonaws.com/text-datasets/babi_tasks_1-20_v1-2.tar.gz", data_set_zip)
+    # def download_models():
+    #     from neural.filedownload import url_download
+    #     if not os.path.isfile(glove_zip_file) and not os.path.isfile(glove_vectors_file):
+    #         url_download("http://nlp.stanford.edu/data/glove.6B.zip", glove_zip_file)
+    #     if not os.path.isfile(data_set_zip) and not (os.path.isfile(train_set_file) and os.path.isfile(test_set_file)):
+    #         url_download("https://s3.amazonaws.com/text-datasets/babi_tasks_1-20_v1-2.tar.gz", data_set_zip)
 
     def unzip_single_file(zip_file_name, output_file_name):
         """
@@ -37,27 +37,30 @@ def process_models():
             with tarfile.open(zip_file_name) as un_zipped:
                 un_zipped.extract(interior_relative_path + output_file_name)
 
-    download_models()
+    # download_models()
     unzip_single_file(glove_zip_file, glove_vectors_file)
-    targz_unzip_single_file(data_set_zip, train_set_file, "tasks_1-20_v1-2/en/")
-    targz_unzip_single_file(data_set_zip, test_set_file, "tasks_1-20_v1-2/en/")
+    targz_unzip_single_file(data_set_zip, train_set_file, path + "tasks_1-20_v1-2/en/")
+    targz_unzip_single_file(data_set_zip, test_set_file, path + "tasks_1-20_v1-2/en/")
 
 
 logging.basicConfig(level=logging.DEBUG)
 glove_zip_file = "glove.6B.zip"
+path = "./neural/"
 glove_vectors_file = "glove.6B.50d.txt"
 # 15 MB
 data_set_zip = "tasks_1-20_v1-2.tar.gz"
 # Select "task 5"
 train_set_file = "qa5_three-arg-relations_train.txt"
 test_set_file = "qa5_three-arg-relations_test.txt"
-train_set_post_file = "tasks_1-20_v1-2/en/" + train_set_file
-test_set_post_file = "tasks_1-20_v1-2/en/" + test_set_file
-process_models()
+train_set_post_file = path + "tasks_1-20_v1-2/en/" + train_set_file
+test_set_post_file = path + "tasks_1-20_v1-2/en/" + test_set_file
+
+# process_models()
+
 '''-----------------------------------------------------------'''
 # Deserialize GloVe vectors
-print(os.getcwd())
-os.chdir('..')
+# print(os.getcwd())
+# os.chdir("..")
 # print(os.getcwd())
 from entity.embeddingrepo import EmbeddingDbRepo
 
@@ -82,7 +85,7 @@ v = np.var(s, 0)
 m = np.mean(s, 0)
 RS = np.random.RandomState()
 
-os.chdir('./neural')
+
 # print(os.getcwd())
 def fill_unk(unk):
     global glove_wordmap
@@ -94,17 +97,6 @@ def fill_unk(unk):
 
 
 def sentence2sequence(sentence):
-    """
-
-    - Turns an input paragraph into an (m,d) matrix,
-        where n is the number of tokens in the sentence
-        and d is the number of dimensions each word vector has.
-
-      TensorFlow doesn't need to be used here, as simply
-      turning the sentence into a sequence based off our
-      mapping does not need the computational power that
-      TensorFlow provides. Normal Python suffices for this task.
-    """
     tokens = sentence.strip('"(),-').lower().split(" ")
     rows = []
     words = []
@@ -113,6 +105,7 @@ def sentence2sequence(sentence):
         i = len(token)
         while len(token) > 0:
             word = token[:i]
+            # print(word)
             if word in glove_wordmap:
                 rows.append(glove_wordmap[word])
                 words.append(word)
@@ -133,45 +126,78 @@ def sentence2sequence(sentence):
 '''-----------------------------------------------------------'''
 
 
-def contextualize(set_file):
-    """
-    Read in the dataset of questions and build question+answer -> context sets.
-    Output is a list of data points, each of which is a 7-element tuple containing:
-        The sentences in the context in vectorized form.
-        The sentences in the context as a list of string tokens.
-        The question in vectorized form.
-        The question as a list of string tokens.
-        The answer in vectorized form.
-        The answer as a list of string tokens.
-        A list of numbers for supporting statements, which is currently unused.
-    """
+def contextualize(category, val=False):
     data = []
     context = []
-    with open(set_file, "r", encoding="utf8") as train:
-        for line in train:
-            l, ine = tuple(line.split(" ", 1))
-            # Split the line numbers from the sentences they refer to.
-            if l is "1":
-                # New contexts always start with 1,
-                # so this is a signal to reset the context.
-                context = []
-            if "\t" in ine:
-                # Tabs are the separator between questions and answers,
-                # and are not present in context statements.
-                question, answer, support = tuple(ine.split("\t"))
-                data.append((tuple(zip(*context)) +
-                             sentence2sequence(question) +
-                             sentence2sequence(answer) +
-                             ([int(s) for s in support.split()],)))
-                # Multiple questions may refer to the same context, so we don't reset it.
-            else:
-                # Context sentence.
-                context.append(sentence2sequence(ine[:-1]))
+    if val:
+        from entity.patternrepo import PatternDbRepo
+        patrepo = PatternDbRepo()
+        pattern = patrepo.all(category)
+        for p in pattern:
+            # print(p.episodes)
+            p.category_id = category
+            context = []
+            # print("new", "-------------------------------------------")
+            for pkey, pval in p.episodes.items():
+                # print(ep)
+                context.append(sentence2sequence(pval))
+
+                # print(context)
+
+                if pkey in p.questions:
+                    data.append((tuple(zip(*context)) +
+                                 sentence2sequence(p.questions[pkey][0]) +
+                                 sentence2sequence(p.questions[pkey][1]) +
+                                 ([int(pkey)],)))
+            # print("-------------------------------------------")
+
+
+
+    else:
+        with open(category, "r", encoding="utf8") as train:
+            for line in train:
+                l, ine = tuple(line.split(" ", 1))
+                # Split the line numbers from the sentences they refer to.
+                if l is "1":
+                    # New contexts always start with 1,
+                    # so this is a signal to reset the context.
+                    context = []
+                if "\t" in ine:
+                    # Tabs are the separator between questions and answers,
+                    # and are not present in context statements.
+                    # print(tuple(ine.split("\t")))
+                    question, answer, support = tuple(ine.split("\t"))
+
+                    # print("old", question, answer, support.replace("\n",''))
+                    # print("old", "-------------------------------------------")
+                    # print(context)
+                    # print("-------------------------------------------")
+                    data.append((tuple(zip(*context)) +
+                                 sentence2sequence(question) +
+                                 sentence2sequence(answer) +
+                                 ([int(s) for s in support.replace("\n", '')],)))
+                    # Multiple questions may refer to the same context, so we don't reset it.
+                else:
+                    # Context sentence.
+                    # print(ine.replace("\n", ''))
+                    context.append(sentence2sequence(ine.replace("\n", '')))
+                # print("-------------------------------------------")
+
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    # print(data[0])
+    # print(data)
     return data
 
 
-train_data = contextualize(train_set_post_file)
-test_data = contextualize(test_set_post_file)
+train_set_post_file = "./neural/tasks_1-20_v1-2/en/" + "qa5.txt"
+# train_data = contextualize(train_set_post_file)
+
+train_data = contextualize(1, val=True)
+print("finish")
+print(os.getcwd())
+train_set_post_file = "E:/Desktop/Licenta/master/virtual-client-assistant/neural/tasks_1-20_v1-2/en/qa5_three-arg-relations_test.txt"
+test_data = contextualize(train_set_post_file)
+
 '''-----------------------------------------------------------'''
 final_train_data = []
 
@@ -530,6 +556,7 @@ def prep_batch(batch_data, more_data=False):
 
 '''-----------------------------------------------------------'''
 # Prepare validation set
+print(final_test_data.shape[0])
 batch = np.random.randint(final_test_data.shape[0], size=batch_size * 10)
 batch_data = final_test_data[batch]
 
@@ -595,8 +622,8 @@ def session_manage(location, rewrite=False, iter=30000, batch_size=batch_size):
         return restore_sess(full_location)
 
 
-train_location = "./pre_trained_model/"
-sess = session_manage(train_location, rewrite=False)
+train_location = "./neural/pre_trained_model/"
+sess = session_manage(train_location, rewrite=True)
 '''-----------------------------------------------------------'''
 ancr = sess.run([corrbool, locs, total_loss, logits, facts_0s, w_1] + attends +
                 [query, cs, question_module_outputs], feed_dict=validation_set)

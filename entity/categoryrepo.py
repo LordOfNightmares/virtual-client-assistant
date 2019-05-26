@@ -10,7 +10,7 @@ class CategoryDbRepo(DatabaseRepo):
         # verify if id exists, if exists then update else insert
 
         if entity.get_id() is None:
-            query = "INSERT INTO Ai_categories(title) VALUES " + "('" + entity.title[-len("./neural/tasks_1-20_v1-2/en/"):]+"')"
+            query = "INSERT INTO Ai_categories(title) VALUES " + "('" + entity.title[len("./neural/tasks_1-20_v1-2/en/"):]+"')"
             self.db.execute(query)
         self.db.commit()
         entity.id = self.db.last_id(self.table)

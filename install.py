@@ -2,6 +2,7 @@ import os
 
 from unidecode import unidecode
 
+from entity.embeddingrepo import EmbeddingDbRepo
 from sql.sqldb import Sql
 
 db_install = [file for file in os.listdir('sql') if file.endswith(".sql")]
@@ -37,5 +38,21 @@ def install_db(db=Sql('server.db')):
 # from subprocess import check_output
 # check_output("DEL /F /Q /A server.db")
 install_db()
-# except sqlite3.Error as de:
-#     print(de.__traceback__.tb_lineno, de)
+
+from entity.patternrepo import PatternDbRepo
+pdb = PatternDbRepo()
+path = "./neural/tasks_1-20_v1-2/en/"
+file = "qa5.txt"
+file_path = path + file
+print(file_path)
+pdb.upload_qa_to_db(file_path)
+
+# pdb.all(8)
+# pdb.db.close()
+
+file = 'glove.6B.50d.txt'
+path = './neural/'
+file_path = path + file
+emrep = EmbeddingDbRepo()
+emrep.upload_embeddings(file_path, False)
+# print(emrep.find('word', 'life'))
