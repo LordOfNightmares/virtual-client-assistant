@@ -9,26 +9,21 @@ class PatternDbRepo(DatabaseRepo):
         super().__init__("Ai_stories")
 
     def save(self, entity):
-        # verify if id exists, if exists then update else insert
         query = "INSERT INTO Ai_stories(category_id) VALUES " + "(" + str(entity.category_id) + ")"
-        print(query)
         self.db.execute(query)
-        for pkey, pval in entity.questions.items():
+        '''ID integer primary key AUTOINCREMENT,
+                story_id integer,
+                episode_id integer,
+                text varchar(255),
+                typo integer'''
+
+        for pkey, pval in entity.episodes.items():
             entity.id = self.db.last_id(self.table)
-            query = "INSERT INTO Ai_qas(question,answer,story_id,facts_id) VALUES " \
-                    + "('" + entity.questions[pkey][0] + "','" + entity.questions[pkey][1] + "'," + str(
-                entity.id) + "," + str(pkey) + ")"
-            print(pkey, query)
+            query = "INSERT INTO Ai_dataset(story_id,episode_id,text,typo) VALUES " + "(" + str(
+                entity.id) + "," + str(pkey) + ",'" + pval[0] + "'," + str(pval[1]) + ")"
+            # print(query)
             self.db.execute(query)
-        for episode_key, episode_val in entity.episodes.items():
-            query = "INSERT INTO Ai_episodes(story_id,episode_id,text) VALUES " \
-                    + "(" + str(entity.id) + "," + str(episode_key) + ",'" + episode_val + "')"
-            self.db.execute(query)
-        print("here")
-        # else:
-        #     self.db.update(self.table, entity)
         self.db.commit()
-        # obtain last insert id in self
         return entity
 
     def upload_qa_to_db(self, qa_dataset_file):
@@ -44,6 +39,7 @@ class PatternDbRepo(DatabaseRepo):
         cdb.save(c)
 
         # print(c)
+
         episodes = {}
         quas = {}
         with open(qa_dataset_file, "r", encoding="utf8") as glove:
@@ -53,18 +49,15 @@ class PatternDbRepo(DatabaseRepo):
                 vector_id, vector = tuple(line.split(" ", 1))
                 if int(vector_id) == 1:
                     if len(episodes) > 0:
-                        p = Pattern(episodes, quas, c.id)
-                        quas = {}
+                        p = Pattern(episodes, c.id)
                         episodes = {}
                         self.save(p)
                 if "?" in vector:
-                    question, answer = tuple(vector.split("?", 1))
-                    answer, fact_id = tuple(answer.strip().split("\t", 1))
-                    quas.update({fact_id: [question, answer]})
+                    episodes.update({vector_id: [vector.replace("\n", ''), 1]})
                 else:
-                    episodes.update({vector_id: vector.replace("\n", '')})
+                    episodes.update({vector_id: [vector.replace("\n", ''), 0]})
                 if line is last:
-                    p = Pattern(episodes, quas, c.id)
+                    p = Pattern(episodes, c.id)
                     self.save(p)
 
     def upload_glove_to_db(self, glove_vectors_file):
@@ -76,28 +69,15 @@ class PatternDbRepo(DatabaseRepo):
         all = [self.get(story[0]) for story in stories_results if stories_results]
         return all
 
-    def get_episodes(self, id):
-        query = "SELECT * FROM Ai_episodes WHERE story_id = '" + str(id) + "' order by story_id ASC, episode_id ASC"
-        episodes = self.db.select(query)
-        episodes = [list(i)[2:] for i in episodes]
-        eps = {}
-        for ep in episodes:
-            eps.update({ep[0]: ep[1]})
-        return eps
+    def get_dataset(self, id):
+        query = "SELECT * FROM Ai_dataset WHERE story_id=" + str(id)
+        dataset = self.db.select(query)
+        episodes = {}
+        # print(dataset)
+        for episode in dataset:
+            episodes.update({list(episode)[2]: [list(episode)[3], list(episode)[4]]})
+        return episodes
 
-    def get_qas(self, id):
-        query = "SELECT * FROM Ai_qas WHERE story_id = '" + str(id) + "'"
-        qas = [list(qa) for qa in self.db.select(query)]
-        questions, answers, fact_ids = [], [], []
-        qas_processed = {}
-        for qa in qas:
-            qas_processed[qa[4]] = [qa[1], qa[2]]
-            # questions.append(qa[1])
-            # answers.append(qa[2])
-            # fact_ids.append(qa[4])
-        return qas_processed
-
-    def get(self, id):
-        p = Pattern(self.get_episodes(id), self.get_qas(id), id=id)
-        print(p)
+    def get(self, id, category_id=0):
+        p = Pattern(self.get_dataset(id), category_id, id=id)
         return p

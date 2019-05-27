@@ -134,25 +134,22 @@ def contextualize(category, val=False):
         patrepo = PatternDbRepo()
         pattern = patrepo.all(category)
         for p in pattern:
-            # print(p.episodes)
             p.category_id = category
-            context = []
-            # print("new", "-------------------------------------------")
-            for pkey, pval in p.episodes.items():
-                # print(ep)
-                context.append(sentence2sequence(pval))
-
-                # print(context)
-
-                if pkey in p.questions:
+            # print(p.episodes)
+            for num_ep, episode in p.episodes.items():
+                if num_ep is 1:
+                    print("\n---->context reset")
+                    context = []
+                if bool(episode[1]):
+                    question, answer, support = tuple(episode[0].split("\t"))
                     data.append((tuple(zip(*context)) +
-                                 sentence2sequence(p.questions[pkey][0]) +
-                                 sentence2sequence(p.questions[pkey][1]) +
-                                 ([int(pkey)],)))
-            # print("-------------------------------------------")
-
-
-
+                                 sentence2sequence(question) +
+                                 sentence2sequence(answer) +
+                                 ([int(s) for s in support.replace("\n", '')],)))
+                    print("\n<<<<<q-context\t", num_ep, question, "→", answer, support.replace("\n", ''))
+                else:
+                    context.append(sentence2sequence(episode[0].replace("\n", '')))
+                    print(">>>>>e-context\t", num_ep, episode[0].replace("\n", ''))
     else:
         with open(category, "r", encoding="utf8") as train:
             for line in train:
@@ -169,8 +166,8 @@ def contextualize(category, val=False):
                     question, answer, support = tuple(ine.split("\t"))
 
                     # print("old", question, answer, support.replace("\n",''))
-                    # print("old", "-------------------------------------------")
-                    # print(context)
+                    print("old", "-------------------------------------------")
+                    # print(*context)
                     # print("-------------------------------------------")
                     data.append((tuple(zip(*context)) +
                                  sentence2sequence(question) +
@@ -189,14 +186,14 @@ def contextualize(category, val=False):
     return data
 
 
-train_set_post_file = "./neural/tasks_1-20_v1-2/en/" + "qa5.txt"
+# train_set_post_file = "E:/Desktop/Licenta/master/virtual-client-assistant/neural/tasks_1-20_v1-2/en/qa5.txt"
 # train_data = contextualize(train_set_post_file)
 
 train_data = contextualize(1, val=True)
 print("finish")
 print(os.getcwd())
-train_set_post_file = "E:/Desktop/Licenta/master/virtual-client-assistant/neural/tasks_1-20_v1-2/en/qa5_three-arg-relations_test.txt"
-test_data = contextualize(train_set_post_file)
+# train_set_post_file = "E:/Desktop/Licenta/master/virtual-client-assistant/neural/tasks_1-20_v1-2/en/qa5_three-arg-relations_test.txt"
+# test_data = contextualize(train_set_post_file)
 
 '''-----------------------------------------------------------'''
 final_train_data = []
@@ -221,7 +218,7 @@ def finalize(data):
 
 
 final_train_data = finalize(train_data)
-final_test_data = finalize(test_data)
+final_test_data = finalize(train_data)#finalize(test_data)
 '''-----------------------------------------------------------'''
 tf.reset_default_graph()
 '''-----------------------------------------------------------'''
@@ -623,7 +620,7 @@ def session_manage(location, rewrite=False, iter=30000, batch_size=batch_size):
 
 
 train_location = "./neural/pre_trained_model/"
-sess = session_manage(train_location, rewrite=True)
+sess = session_manage(train_location, rewrite=False)
 '''-----------------------------------------------------------'''
 ancr = sess.run([corrbool, locs, total_loss, logits, facts_0s, w_1] + attends +
                 [query, cs, question_module_outputs], feed_dict=validation_set)
@@ -635,6 +632,7 @@ faq = np.sum(ancr[4], axis=(-1, -2))  # Number of facts in each context
 
 limit = 5
 for question in range(min(limit, batch_size)):
+    print(question)
     plt.yticks(range(passes, 0, -1))
     plt.ylabel("Episode")
     plt.xlabel("Question " + str(question + 1))
