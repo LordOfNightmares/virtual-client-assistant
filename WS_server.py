@@ -1,3 +1,18 @@
+import subprocess
+from virtual_assistant_use import virtual_assistant
+
+def ai_response(message):
+    cmd = "python virtual_assistant_use.py '" + message.replace('\n','_') + "'"
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+    out, err = p.communicate()
+    # result = out.split('\n')
+    from pprint import  pprint
+    if err:
+        response = err.decode("utf-8")
+    else:
+        response = out.decode("utf-8")
+    return response
+
 import asyncio
 import json
 
@@ -13,11 +28,12 @@ from entity.userrepo import UserDbRepo
 
 online_users = set()
 
+
 async def prepare_conversation(data):
     cdb = ConversationDbRepo()
     c = cdb.get(data['cid'])
     if not c:
-        print('--->',data)
+        print('--->', data)
         if data['uid']:
             c = Conversation(data['cid'], data['uid'])
             cdb.save(c)
@@ -36,10 +52,14 @@ async def process_msg(websocket):
                 c = await prepare_conversation(data)
                 if c:
                     udb = UserDbRepo()
-                    print("c",c)
+                    print("c", c)
                     u = udb.get(c.user_id)
                     await websocket.send(json.dumps({"answer": "user_confirmed", "user": dict(u)}))
-                    messages = [dict(m) for m in mdb.all(data['cid'])]
+                    msgs = mdb.all(data['cid'])
+                    if msgs:
+                        messages = [dict(m) for m in msgs]
+                    else:
+                        messages = []
                     await websocket.send(json.dumps({"answer": "messages_loaded", "messages": messages}))
             if action == "user_data":
                 udb = UserDbRepo()
@@ -57,6 +77,10 @@ async def process_msg(websocket):
                 mdb = MessageDbRepo()
                 # print(data['m'])
                 m = Message('', data['user_message'], data['uid'], 0, data['cid'])
+                mdb.save(m)
+
+                await websocket.send(json.dumps({"answer": "message_confirmed", "message": dict(m)}))
+                m = Message('',virtual_assistant(m.body), data['uid'], 2, data['cid'])
                 mdb.save(m)
                 await websocket.send(json.dumps({"answer": "message_confirmed", "message": dict(m)}))
                 # udb.save(m)

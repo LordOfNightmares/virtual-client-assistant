@@ -44,7 +44,7 @@ pdb = PatternDbRepo()
 path = "./neural/tasks_1-20_v1-2/en/"
 file = "qa5.txt"
 file_path = path + file
-print(file_path)
+# print(file_path)
 pdb.upload_qa_to_db(file_path)
 
 # pdb.all(8)

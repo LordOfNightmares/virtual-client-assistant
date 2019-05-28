@@ -29,7 +29,7 @@ class PatternDbRepo(DatabaseRepo):
     def upload_qa_to_db(self, qa_dataset_file):
         from tqdm import tqdm
         def file_len(fname):
-            with open(fname, "r", encoding="utf8") as f:
+            with open(fname, "r", encoding='utf-8-sig') as f:
                 for i, l in enumerate(f):
                     pass
             return i + 1
@@ -41,12 +41,12 @@ class PatternDbRepo(DatabaseRepo):
         # print(c)
 
         episodes = {}
-        quas = {}
-        with open(qa_dataset_file, "r", encoding="utf8") as glove:
+        with open(qa_dataset_file, "r", encoding='utf-8-sig') as glove:
             lines = glove.readlines()
             last = lines[-1]
             for line in tqdm(lines, total=file_len(qa_dataset_file)):
                 vector_id, vector = tuple(line.split(" ", 1))
+                # print(vector_id)
                 if int(vector_id) == 1:
                     if len(episodes) > 0:
                         p = Pattern(episodes, c.id)

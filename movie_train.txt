@@ -1,0 +1,249 @@
+1 The movie title is Aladdin.
+2 I have seen a great movie.
+3 The movie is new.
+4 A kindhearted street urchin named Aladdin embarks on a magical adventure after finding a lamp that releases a wisecracking genie while a power-hungry Grand Vizier vies for the same lamp that has the power to make their deepest wishes come true.
+5 Many people have seen this movie.
+6 The movie is about Adventure.
+7 This is a Fantasy.
+8 This is a Music.
+9 This is a Romance.
+10 The movie falls in Comedy category.
+11 The genre of movie is Family.
+12 What is this movie about?	Adventure	6
+13 Which movie was it?	Aladdin	1
+14 How many people like this movie?	yes	5
+15 What rating does the movie have?	great	2
+1 The movie title is John Wick: Chapter 3 – Parabellum.
+2 I have seen a great movie.
+3 Just hit the cinema.
+4 Super-assassin John Wick returns with a $14 million price tag on his head and an army of bounty-hunting killers on his trail.
+5 After killing a member of the shadowy international assassin’s guild, the High Table, John Wick is excommunicado, but the world’s most ruthless hit men and women await his every turn.
+6 Many people have seen this movie.
+7 This is a Crime.
+8 This is a Action.
+9 This is a Thriller.
+10 What is this movie about?	Crime	7
+11 Which movie was it?	John Wick: Chapter 3 – Parabellum	1
+12 Is this movie popular?	yes	6
+13 How much was it rated?	great	2
+1 The movie title is Avengers: Endgame.
+2 The movie is amazing.
+3 Just hit the cinema.
+4 The movie is very popular.
+5 The movie falls in Adventure category.
+6 The movie falls in Science Fiction category.
+7 This is a Action.
+8 About what is the movie?	Adventure	5
+9 Can you tell me the name of movie?	Avengers: Endgame	1
+10 Is this movie popular?	yes	4
+11 Is it a good movie?	great	2
+1 The movie is entitled Us.
+2 The movie is good.
+3 Fresh movie.
+4 Husband and wife Gabe and Adelaide Wilson take their kids to their beach house expecting to unplug and unwind with friends.
+5 But as night descends, their serenity turns to tension and chaos when some shocking visitors arrive uninvited.
+6 Many people have seen this movie.
+7 The genre of movie is Thriller.
+8 The movie falls in Horror category.
+9 About what is the movie?	Thriller	7
+10 What is the movie name?	Us	1
+11 How many people like this movie?	yes	6
+12 Is it a good movie?	great	2
+1 The movie title is Pokémon Detective Pikachu.
+2 The movie is amazing.
+3 Just hit the cinema.
+4 In a world where people collect pocket-size monsters (Pokémon) to do battle, a boy comes across an intelligent monster who seeks to be a detective.
+5 Many people have seen this movie.
+6 The movie falls in Mystery category.
+7 The genre of movie is Family.
+8 This is a Comedy.
+9 This is a Science Fiction.
+10 This is a Action.
+11 The genre of movie is Adventure.
+12 About what is the movie?	Mystery	6
+13 What is the movie name?	Pokémon Detective Pikachu	1
+14 How many people like this movie?	yes	5
+15 What rating does the movie have?	great	2
+1 The movie is Shazam!.
+2 I have seen a great movie.
+3 The movie is new.
+4 A boy is given the ability to become an adult superhero in times of need with a single magic word.
+5 The movie is very popular.
+6 The genre of movie is Action.
+7 The movie falls in Adventure category.
+8 This is a Comedy.
+9 The movie is about Fantasy.
+10 What genre the movie falls in?	Action	6
+11 Which movie was it?	Shazam!	1
+12 How many people like this movie?	yes	5
+13 Is it a good movie?	great	2
+1 The movie is entitled Escobar: Paradise Lost.
+2 The movie is amazing.
+3 The movie is retro.
+4 The movie is well known.
+5 The movie is about Thriller.
+6 This is a Romance.
+7 About what is the movie?	Thriller	5
+8 Which movie was it?	Escobar: Paradise Lost	1
+9 How many people like this movie?	yes	4
+10 Is it a good movie?	great	2
+1 The movie title is Catarina and the others.
+2 The movie is bad.
+3 Ancient movie.
+4 The movie is well known.
+5 This is a Drama.
+6 The genre of movie is Mystery.
+7 What genre the movie falls in?	Drama	5
+8 Can you tell me the name of movie?	Catarina and the others	1
+9 Is it popular?	yes	4
+10 Is it a good movie?	bad	2
+1 The movie title is Captain Marvel.
+2 The movie is good.
+3 Just hit the cinema.
+4 The story follows Carol Danvers as she becomes one of the universe’s most powerful heroes when Earth is caught in the middle of a galactic war between two alien races.
+5 Set in the 1990s, Captain Marvel is an all-new adventure from a previously unseen period in the history of the Marvel Cinematic Universe.
+6 Many people have seen this movie.
+7 The movie is about Action.
+8 The genre of movie is Adventure.
+9 The movie falls in Science Fiction category.
+10 What is this movie about?	Action	7
+11 Can you tell me the name of movie?	Captain Marvel	1
+12 Is this movie popular?	yes	6
+13 Is it a good movie?	great	2
+1 The movie is Brightburn.
+2 The movie is bad.
+3 Fresh movie.
+4 A child from another world crash-lands on Earth, but instead of becoming a hero to mankind, he is an evil little boy.
+5 The movie is well known.
+6 The genre of movie is Horror.
+7 This is a Science Fiction.
+8 The movie falls in Drama category.
+9 The movie is about Thriller.
+10 About what is the movie?	Horror	6
+11 What is the movie name?	Brightburn	1
+12 Is this movie popular?	yes	5
+13 What rating does the movie have?	bad	2
+1 The movie is Fate/stay night: Heaven’s Feel II. lost butterfly.
+2 Worst movie ever.
+3 The movie is new.
+4 Theatrical-release adaptation of the visual novel "Fate/stay night", following the third and final route.
+5 (Part 2 of a trilogy.
+6 The movie is well known.
+7 The genre of movie is Animation.
+8 This is a Action.
+9 This is a Fantasy.
+10 The movie is about Adventure.
+11 What is this movie about?	Animation	7
+12 What is the movie name?	Fate/stay night: Heaven’s Feel II. lost butterfly	1
+13 Is this movie popular?	yes	6
+14 What rating does the movie have?	bad	2
+1 The movie is entitled Vaarikkuzhiyile Kolapathakam.
+2 The movie is bad.
+3 Just hit the cinema.
+4 Vaarikkuzhiyile Kolapathakam is a 2019 Malayalam mystery thriller film directed by Rejishh Midhila for Take One Entertainments.
+5 A low profile film, but was released with highly positive reviews and became a sleeper hit.
+6 The film is getting ready for a release in China.
+7 The movie is well known.
+8 The movie falls in Comedy category.
+9 The movie falls in Thriller category.
+10 What is this movie about?	Comedy	8
+11 Do you know the name of movie?	Vaarikkuzhiyile Kolapathakam	1
+12 How many people like this movie?	yes	7
+13 Is it a good movie?	bad	2
+1 The movie is Avengers: Infinity War.
+2 The movie is amazing.
+3 Just hit the cinema.
+4 As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos.
+5 A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality.
+6 Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain.
+7 The movie is very popular.
+8 This is a Adventure.
+9 The movie falls in Action category.
+10 The movie falls in Fantasy category.
+11 What genre the movie falls in?	Adventure	8
+12 Do you know the name of movie?	Avengers: Infinity War	1
+13 How many people like this movie?	yes	7
+14 What rating does the movie have?	great	2
+1 The movie title is John Wick.
+2 The movie is good.
+3 The movie is old.
+4 Ex-hitman John Wick comes out of retirement to track down the gangsters that took everything from him.
+5 Many people have seen this movie.
+6 The movie falls in Action category.
+7 This is a Thriller.
+8 About what is the movie?	Action	6
+9 Can you tell me the name of movie?	John Wick	1
+10 Is it popular?	yes	5
+11 How much was it rated?	great	2
+1 The movie is The Hustle.
+2 I have seen better movies.
+3 Fresh movie.
+4 Two female scam artists, one low rent and the other high class, compete to swindle a naïve tech prodigy out of his fortune.
+5 A remake of the 1988 comedy "Dirty Rotten Scoundrels.
+6 Many people have seen this movie.
+7 The movie falls in Comedy category.
+8 About what is the movie?	Comedy	7
+9 What is the movie name?	The Hustle	1
+10 How many people like this movie?	yes	6
+11 What rating does the movie have?	bad	2
+1 The movie is entitled How to Train Your Dragon: The Hidden World.
+2 I have seen a great movie.
+3 Fresh movie.
+4 As Hiccup fulfills his dream of creating a peaceful dragon utopia, Toothless’ discovery of an untamed, elusive mate draws the Night Fury away.
+5 When danger mounts at home and Hiccup’s reign as village chief is tested, both dragon and rider must make impossible decisions to save their kind.
+6 Many people have seen this movie.
+7 The movie falls in Animation category.
+8 The movie is about Family.
+9 The genre of movie is Adventure.
+10 What genre the movie falls in?	Animation	7
+11 Can you tell me the name of movie?	How to Train Your Dragon: The Hidden World	1
+12 How many people like this movie?	yes	6
+13 How much was it rated?	great	2
+1 The movie title is Pet Sematary.
+2 I have seen better movies.
+3 Just hit the cinema.
+4 The movie is very popular.
+5 The genre of movie is Thriller.
+6 This is a Mystery.
+7 This is a Horror.
+8 About what is the movie?	Thriller	5
+9 What is the movie name?	Pet Sematary	1
+10 How many people like this movie?	yes	4
+11 Is it a good movie?	bad	2
+1 The movie title is Cars.
+2 The movie is amazing.
+3 The movie is old.
+4 The movie is very popular.
+5 The movie falls in Animation category.
+6 The movie falls in Adventure category.
+7 The genre of movie is Comedy.
+8 The genre of movie is Family.
+9 About what is the movie?	Animation	5
+10 Which movie was it?	Cars	1
+11 Is this movie popular?	yes	4
+12 How much was it rated?	great	2
+1 The movie title is Glass.
+2 The movie is amazing.
+3 Fresh movie.
+4 In a series of escalating encounters, security guard David Dunn uses his supernatural abilities to track Kevin Wendell Crumb, a disturbed man who has twenty-four personalities.
+5 Meanwhile, the shadowy presence of Elijah Price emerges as an orchestrator who holds secrets critical to both men.
+6 Many people have seen this movie.
+7 The genre of movie is Thriller.
+8 This is a Mystery.
+9 The movie is about Drama.
+10 What genre the movie falls in?	Thriller	7
+11 Can you tell me the name of movie?	Glass	1
+12 How many people like this movie?	yes	6
+13 Is it a good movie?	great	2
+1 The movie is Cold Pursuit.
+2 Worst movie ever.
+3 Just hit the cinema.
+4 The movie is well known.
+5 This is a Action.
+6 The genre of movie is Drama.
+7 The movie falls in Thriller category.
+8 This is a Crime.
+9 What is this movie about?	Action	5
+10 Can you tell me the name of movie?	Cold Pursuit	1
+11 How many people like this movie?	yes	4
+12 Is it a good movie?	bad	2

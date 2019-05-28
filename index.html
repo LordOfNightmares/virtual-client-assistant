@@ -21,7 +21,7 @@
             width: 100%;
         }
 
-        form input {
+        form input,form textarea {
             border: 0;
             padding: 10px;
             width: 90%;
@@ -39,6 +39,8 @@
             list-style-type: none;
             margin: 0;
             padding: 0;
+                overflow: scroll;
+                height:90vh;
         }
 
         #messages li {
@@ -69,7 +71,8 @@
     <button>Start Conversation</button>
 </form>
 <form id="message-form" action="">
-    <input id="user_message" autocomplete="off" placeholder="Message"/>
+<!--    <input id="user_message" autocomplete="off" placeholder="Message"/>-->
+     <textarea id="user_message" autocomplete="off" placeholder="Message"></textarea>
     <button>Send</button>
 </form>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -123,13 +126,13 @@
 
             }
             if (data.answer == "message_confirmed") {
-                $('#messages').append($('<li>').text(data.message.body));
+                $('#messages').append($('<li>').html(data.message.body.replace(/(?:\r\n|\r|\n)/g,'<br>')));
                 window.scrollTo(0, document.body.scrollHeight);
             }
             if (data.answer == "messages_loaded") {
                 for (var m in data.messages) {
-                    $('#messages').append($('<li>').text(data.messages[m].body));
-                    window.scrollTo(0, document.body.scrollHeight);
+                    $('#messages').append($('<li>').html(data.messages[m].body.replace(/(?:\r\n|\r|\n)/g,'<br>')));
+                   $('#messages').scrollTop( $('#messages').height() + 2000 )
                 }
 
             }
